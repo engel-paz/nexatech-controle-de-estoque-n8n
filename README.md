@@ -76,3 +76,7 @@ Este projeto foi desenvolvido para praticar conceitos importantes de automação
 ### Workflow no n8n
 
 <img width="1427" height="510" alt="image" src="https://github.com/user-attachments/assets/068d10b7-7098-4ae1-bfbd-1a89f5805c12" />
+
+### Vídeo demonstrativo
+
+https://www.loom.com/share/3b443287bef54fedb56e6dca9b1dc777
