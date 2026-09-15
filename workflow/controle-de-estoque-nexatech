@@ -1,0 +1,592 @@
+{
+  "name": "controle_de_estoque",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "SEU_GOOGLE_SHEETS_ID",
+          "mode": "list",
+          "cachedResultName": "Controle de estoque - NexaTech",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/SEU_GOOGLE_SHEETS_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1318438996,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/SEU_GOOGLE_SHEETS_ID/edit#gid=1318438996"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "cff096b5-2f10-4c84-87f1-d0171e564fb4",
+      "name": "verificar_nova_linha",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "Dh3g2FRKd83UYAyo",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "SEU_GOOGLE_SHEETS_ID",
+          "mode": "list",
+          "cachedResultName": "Controle de estoque - NexaTech",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/SEU_GOOGLE_SHEETS_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1439632728,
+          "mode": "list",
+          "cachedResultName": "Movimentações",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/SEU_GOOGLE_SHEETS_ID/edit#gid=1439632728"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Quantidade": "={{ $('verificar_nova_linha').item.json['3 - Quantidade'] }}",
+            "Responsável": "={{ $('verificar_nova_linha').item.json['4 - Responsável'] }}",
+            "Produto ID": "={{ $json.ID }}",
+            "Tipo": "={{ $('verificar_nova_linha').item.json['1 - Tipo de movimentação'] }}",
+            "Horário - Data": "={{ $('verificar_nova_linha').item.json.Timestamp }}",
+            "Observação": "={{ $('verificar_nova_linha').item.json['5 - Observação'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Horário - Data",
+              "displayName": "Horário - Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Tipo",
+              "displayName": "Tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Produto ID",
+              "displayName": "Produto ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Quantidade",
+              "displayName": "Quantidade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Responsável",
+              "displayName": "Responsável",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Observação",
+              "displayName": "Observação",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        512,
+        0
+      ],
+      "id": "6a969132-aa13-496b-8bb4-62bcefef7903",
+      "name": "inserir_nova_movimentação",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jPLpydsFqUswduUB",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Tipo }}",
+                    "rightValue": "Entrada",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "5df03dc9-4956-41ae-bd6b-e9e2ea343ec0"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Entrada"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "01c5a9e4-9f9b-43b0-a388-413306d2e02c",
+                    "leftValue": "={{ $json.Tipo }}",
+                    "rightValue": "Saída",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Saída"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        752,
+        0
+      ],
+      "id": "314e5e47-4511-4d5f-8b03-166f10080ee4",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "SEU_GOOGLE_SHEETS_ID",
+          "mode": "list",
+          "cachedResultName": "Controle de estoque - NexaTech",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/SEU_GOOGLE_SHEETS_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 116910377,
+          "mode": "list",
+          "cachedResultName": "Produtos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/SEU_GOOGLE_SHEETS_ID/edit#gid=116910377"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json['Produto ID'] }}",
+            "Estoque atual": "={{ $('pegar_produto').item.json['Estoque atual'] + $('verificar_nova_linha').item.json['3 - Quantidade']}}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Produto",
+              "displayName": "Produto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Categoria",
+              "displayName": "Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Estoque mínimo",
+              "displayName": "Estoque mínimo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Estoque atual",
+              "displayName": "Estoque atual",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1088,
+        -208
+      ],
+      "id": "584c4808-213a-4abf-9112-4d10a8c3a633",
+      "name": "entrada_estoque",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jPLpydsFqUswduUB",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "042df253-e7bb-42c6-b3eb-57b5ba668cac",
+              "leftValue": "={{ $('verificar_nova_linha').item.json['3 - Quantidade'] }}",
+              "rightValue": "={{ $('pegar_produto').item.json['Estoque atual'] }}",
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1104,
+        192
+      ],
+      "id": "df00b192-557d-4cc0-b99d-3b55e11f83d5",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "SEU_GOOGLE_SHEETS_ID",
+          "mode": "list",
+          "cachedResultName": "Controle de estoque - NexaTech",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/SEU_GOOGLE_SHEETS_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 116910377,
+          "mode": "list",
+          "cachedResultName": "Produtos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/SEU_GOOGLE_SHEETS_ID/edit#gid=116910377"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $('pegar_produto').item.json.ID }}",
+            "Estoque atual": "={{ $('pegar_produto').item.json['Estoque atual'] - $('verificar_nova_linha').item.json['3 - Quantidade']}}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Produto",
+              "displayName": "Produto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Categoria",
+              "displayName": "Categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Estoque mínimo",
+              "displayName": "Estoque mínimo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Estoque atual",
+              "displayName": "Estoque atual",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1424,
+        176
+      ],
+      "id": "69498a4b-773b-4d2a-9de3-5da523fe6c9a",
+      "name": "baixa_estoque",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jPLpydsFqUswduUB",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "SEU_GOOGLE_SHEETS_ID",
+          "mode": "list",
+          "cachedResultName": "Controle de estoque - NexaTech",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/SEU_GOOGLE_SHEETS_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 116910377,
+          "mode": "list",
+          "cachedResultName": "Produtos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/SEU_GOOGLE_SHEETS_ID/edit#gid=116910377"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Produto",
+              "lookupValue": "={{ $json['2 - Nome do produto'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        272,
+        0
+      ],
+      "id": "ab294673-ba08-4247-bfb9-7f787659cfa4",
+      "name": "pegar_produto",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jPLpydsFqUswduUB",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "verificar_nova_linha": {
+      "main": [
+        [
+          {
+            "node": "pegar_produto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "inserir_nova_movimentação": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "entrada_estoque",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "baixa_estoque",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "pegar_produto": {
+      "main": [
+        [
+          {
+            "node": "inserir_nova_movimentação",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "b4620dc5-fae3-4c47-9f08-ec4826119347",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c2f492521dd9a0188a785ea764df420ff5797b68a8e4a0648b3191877b739f47"
+  },
+  "nodeGroups": [],
+  "id": "ZvvDlPECd6f1Hogl",
+  "tags": []
+}
